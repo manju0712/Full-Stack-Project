@@ -3,6 +3,9 @@ import lusca from 'lusca'
 import dotenv from 'dotenv'
 
 import movieRouter from './routers/movie'
+import userRouter from './routers/user'
+import bookRouter from './routers/book'
+import authorRouter from './routers/author'
 import apiErrorHandler from './middlewares/apiErrorHandler'
 import apiContentType from './middlewares/apiContentType'
 
@@ -18,6 +21,9 @@ app.use(express.json())
 
 // Set up routers
 app.use('/api/v1/movies', movieRouter)
+app.use('/api/users', userRouter)
+app.use('/api/books', bookRouter)
+app.use('/api/authors', authorRouter)
 
 // Custom API error handler
 app.use(apiErrorHandler)
