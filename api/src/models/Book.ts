@@ -1,4 +1,4 @@
-import mongoose, { Document, ObjectId, Schema } from 'mongoose'
+import mongoose, { Document, Schema } from 'mongoose'
 
 export type BookDocument = Document & {
   title: string
@@ -47,11 +47,12 @@ const bookSchema = new mongoose.Schema({
   availability: {
     type: String,
   },
-  author: {
-    type: Schema.Types.ObjectId,
-    ref: 'Author',
-    required: true,
-  },
+  author: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Author',
+    },
+  ],
   user: [
     {
       type: Schema.Types.ObjectId,
