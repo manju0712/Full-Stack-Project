@@ -1,8 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
+import jwt from 'jsonwebtoken'
 
 import User from '../models/User'
 import UserService from '../services/user'
 import { BadRequestError } from '../helpers/apiError'
+import { JWT_SECRET } from '../util/secrets'
 
 // POST /movies
 export const createUser = async (
@@ -83,6 +85,24 @@ export const deleteUser = async (
     const userId = req.params.bookId
     await UserService.deleteUser(userId)
     res.status(204).end()
+  } catch (error) {
+    if (error instanceof Error && error.name == 'ValidationError') {
+      next(new BadRequestError('Invalid Request', error))
+    } else {
+      next(error)
+    }
+  }
+}
+// POST /users (Google Login)
+export const googleLogin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = req.user as any
+    const token = jwt.sign({ email: user?.email }, JWT_SECRET)
+    res.send({ user, token })
   } catch (error) {
     if (error instanceof Error && error.name == 'ValidationError') {
       next(new BadRequestError('Invalid Request', error))
